@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Favorite Pokemon Picker Terminal – Scan, Pick, Settle It</title>
+<meta name="description" content="Boot up the Favorite Pokemon Picker terminal to scan a random Pokémon in seconds. Filter by type or region, reroll instantly, and end the debate for free.">
+<meta name="keywords" content="favorite pokemon picker, pokemon randomizer, pokemon scanner tool, random pokemon generator, pick a pokemon online">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Trainer Terminal Project">
+<link rel="canonical" href="https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Favorite Pokemon Picker Terminal – Scan, Pick, Settle It">
+<meta property="og:description" content="A retro scanner-style tool that picks your favorite Pokémon for you. Filter, scan, reroll, repeat — free and instant.">
+<meta property="og:url" content="https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/">
+<meta property="og:site_name" content="Trainer Terminal">
+<meta property="og:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/og-image.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Favorite Pokemon Picker Terminal – Scan, Pick, Settle It">
+<meta name="twitter:description" content="A retro scanner-style tool that picks your favorite Pokémon for you. Filter, scan, reroll, repeat — free and instant.">
+<meta name="twitter:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/og-image.png">
+
+<meta name="theme-color" content="#0D1321">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230D1321'/%3E%3Ccircle cx='50' cy='50' r='24' fill='none' stroke='%2339FF88' stroke-width='6'/%3E%3Ccircle cx='50' cy='50' r='6' fill='%2339FF88'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Favorite Pokemon Picker",
+  "url": "https://favoritepicker.com/",
+  "applicationCategory": "EntertainmentApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "A free scanner-style tool that randomly generates a favorite Pokémon pick, with filters for type, region, and evolution stage."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the picker include Mega Evolutions and regional forms?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, alternate forms and regional variants are included in the pool and can be toggled on or off in the filter panel." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I exclude legendary and mythical Pokemon from results?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, there is a dedicated toggle to remove legendary and mythical Pokemon so results stay focused on standard species." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a daily limit on how many times I can scan?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. You can run the scan as many times as you like with no cooldown, daily cap, or account requirement." }
+    },
+    {
+      "@type": "Question",
+      "name": "Will the tool repeat the same Pokemon twice in a row?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It can, since each scan is an independent random draw from the filtered pool, similar to rolling dice. If you want variety you can manually skip a repeat and scan again." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this for tournament or challenge-run seeding?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, many players use filtered scans to randomly seed challenge runs, draft leagues, or party lineups for streams and tournaments." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is any of my personal data stored when I use the picker?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No account or personal data is required to use the tool, and scan results are not tied to any personal identifier." }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root{
+    --void:#0D1321;
+    --panel:#16213E;
+    --panel2:#101a30;
+    --mint:#39FF88;
+    --magenta:#FF3D9A;
+    --amber:#FFB627;
+    --ink:#E8EAF0;
+    --muted:#8892A6;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--void); color:var(--ink);
+    font-family:'Space Grotesk',sans-serif; font-size:17px; line-height:1.75;
+    position:relative; overflow-x:hidden;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:1;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px);
+    mix-blend-mode:overlay;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:700; line-height:1.2; margin:0 0 .5em;}
+  .pixel{font-family:'Press Start 2P',monospace; letter-spacing:.02em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--mint);}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px; position:relative; z-index:2;}
+  img,svg{max-width:100%; display:block;}
+
+  a:focus-visible, button:focus-visible, summary:focus-visible{
+    outline:3px solid var(--mint); outline-offset:3px; border-radius:4px;
+  }
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--mint); color:var(--void); padding:10px 16px; z-index:300;}
+  .skip-link:focus{left:0;}
+
+  header.site{
+    position:sticky; top:0; z-index:100; background:rgba(13,19,33,.92);
+    backdrop-filter:blur(6px); border-bottom:2px solid var(--panel);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1080px; margin:0 auto;}
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); font-weight:700; font-size:1rem;}
+  .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--mint); box-shadow:0 0 8px var(--mint); flex:none;}
+  nav.links{display:flex; gap:22px; font-size:.9rem;}
+  nav.links a{color:var(--muted); text-decoration:none;}
+  nav.links a:hover{color:var(--mint);}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; font-weight:700; text-decoration:none;
+    padding:12px 22px; border-radius:6px; border:2px solid var(--mint); color:var(--void); background:var(--mint);
+    box-shadow:0 0 0 3px rgba(57,255,136,.15); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:0 0 22px rgba(57,255,136,.5);}
+  .btn.ghost{background:transparent; color:var(--mint);}
+  .btn.small{padding:9px 16px; font-size:.85rem;}
+
+  .hero{padding:64px 24px 40px; position:relative;}
+  .hero-inner{max-width:1080px; margin:0 auto; display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center;}
+  .tag{display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--mint); border:1px solid var(--mint); padding:4px 10px; border-radius:4px; margin-bottom:16px;}
+  .hero h1{font-size:clamp(2.1rem,4.6vw,3rem); color:var(--ink);}
+  .hero h1 .cursor{display:inline-block; width:.5em; background:var(--mint); animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  @media (prefers-reduced-motion: reduce){ .cursor{animation:none;} }
+  .hero p.lead{color:var(--muted); font-size:1.08rem; max-width:520px;}
+  .hero-ctas{display:flex; gap:14px; margin-top:22px; flex-wrap:wrap;}
+
+  /* TERMINAL */
+  .terminal{
+    background:var(--panel); border:2px solid #24304f; border-radius:10px; padding:0; overflow:hidden;
+    box-shadow:0 0 40px rgba(57,255,136,.08);
+  }
+  .term-bar{display:flex; gap:8px; align-items:center; padding:10px 14px; background:var(--panel2); border-bottom:2px solid #24304f;}
+  .term-bar span{width:10px;height:10px;border-radius:50%; display:inline-block;}
+  .term-bar .r{background:var(--magenta);} .term-bar .y{background:var(--amber);} .term-bar .g{background:var(--mint);}
+  .term-title{margin-left:8px; font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--muted);}
+  .term-body{padding:18px 16px; min-height:220px; font-family:'JetBrains Mono',monospace; font-size:.92rem;}
+  .term-line{color:var(--muted); margin:0 0 6px;}
+  .term-line .out{color:var(--mint);}
+  .term-line .warn{color:var(--amber);}
+  #termOutput{white-space:pre-wrap; color:var(--ink); min-height:70px;}
+  .scan-btn{
+    margin-top:12px; width:100%; padding:14px; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:.95rem;
+    border-radius:6px; border:2px solid var(--mint); background:transparent; color:var(--mint); cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .scan-btn:hover{background:var(--mint); color:var(--void);}
+  .term-note{font-size:.72rem; color:var(--muted); margin-top:10px; text-align:center;}
+
+  section{padding:56px 24px; position:relative; z-index:2;}
+  section.band{background:var(--panel2); border-top:1px solid #1f2b47; border-bottom:1px solid #1f2b47;}
+  h2{font-size:clamp(1.5rem,3.2vw,2.05rem);}
+  h2 .bar{display:block; width:56px; height:4px; background:var(--mint); margin:10px 0 20px; box-shadow:0 0 10px var(--mint);}
+  .lead-col{max-width:760px;}
+  .muted{color:var(--muted);}
+
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:26px;}
+  .card{
+    background:var(--panel); border:1px solid #24304f; border-radius:10px; padding:22px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .card:hover{border-color:var(--mint); transform:translateY(-3px);}
+  .card .tagline{font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--magenta); text-transform:uppercase; letter-spacing:.06em;}
+  .card h3{font-size:1.05rem; margin:8px 0 6px;}
+  .card p{color:var(--muted); margin:0; font-size:.95rem;}
+
+  .method{display:grid; gap:16px; margin-top:26px;}
+  .method .row{display:grid; grid-template-columns:70px 1fr; gap:16px; align-items:start; background:var(--panel); border:1px solid #24304f; border-radius:10px; padding:18px;}
+  .method .row .idx{font-family:'JetBrains Mono',monospace; color:var(--mint); font-size:1.3rem; text-align:center;}
+  .method h3{font-size:1.05rem; margin:0 0 4px;}
+  .method p{margin:0; color:var(--muted);}
+
+  .usecase-list{display:grid; gap:14px; margin-top:24px;}
+  .usecase-list li{list-style:none; background:var(--panel); border-left:3px solid var(--magenta); border-radius:0 8px 8px 0; padding:14px 18px;}
+  .usecase-list li strong{color:var(--ink);}
+
+  details.faq{background:var(--panel); border:1px solid #24304f; border-radius:8px; padding:14px 18px; margin-top:12px;}
+  details.faq summary{cursor:pointer; font-weight:600; font-size:1.02rem;}
+  details.faq summary::-webkit-details-marker{color:var(--mint);}
+  details.faq p{color:var(--muted); margin:10px 0 2px;}
+
+  .about-box{display:flex; gap:18px; background:var(--panel); border:1px solid #24304f; border-radius:10px; padding:22px; margin-top:22px;}
+  .about-box .avatar{width:56px;height:56px;border-radius:8px; background:var(--panel2); border:1px solid var(--mint); flex:none; display:flex; align-items:center; justify-content:center; font-size:1.4rem;}
+
+  footer{padding:36px 24px; text-align:center; font-size:.85rem; color:var(--muted); border-top:1px solid #1f2b47;}
+  footer a{color:var(--mint);}
+  .updated{font-family:'JetBrains Mono',monospace; font-size:.72rem; margin-top:6px;}
+
+  @media (max-width: 860px){
+    .hero-inner{grid-template-columns:1fr;}
+    .grid3{grid-template-columns:1fr;}
+    .method .row{grid-template-columns:1fr;}
+    nav.links{display:none;}
+    .about-box{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="nav">
+    <a class="brand" href="#main"><span class="dot" aria-hidden="true"></span>Trainer Terminal</a>
+    <nav class="links" aria-label="Section navigation">
+      <a href="#engine">Engine</a>
+      <a href="#controls">Controls</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn small" href="https://favoritepicker.com/" target="_blank" rel="noopener">Launch Tool</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="tag pixel" style="font-size:.6rem;">SYSTEM READY</span>
+      <h1>Favorite Pokemon Picker<span class="cursor" aria-hidden="true">&nbsp;</span></h1>
+      <p class="lead">You've got a shelf of games, a thousand-plus species, and zero ability to name just one favorite out loud. The <strong>Favorite Pokemon Picker</strong> below solves that in one scan: set a filter if you want, hit the button, and let the terminal hand you an answer instead of you spiraling through the Pokédex for the twentieth time this week.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="https://favoritepicker.com/" target="_blank" rel="noopener">Launch the Full Picker →</a>
+        <a class="btn ghost" href="#engine">See the Engine</a>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="term-title">trainer_terminal.exe — demo mode</span>
+      </div>
+      <div class="term-body">
+        <p class="term-line">&gt; system check<span class="out">... OK</span></p>
+        <p class="term-line">&gt; pool loaded<span class="out">... 1,000+ entries</span></p>
+        <p class="term-line">&gt; awaiting input<span class="warn"> _</span></p>
+        <div id="termOutput" aria-live="polite"></div>
+        <button class="scan-btn mono" id="scanBtn" type="button">[ RUN SCAN ]</button>
+        <p class="term-note">Demo uses placeholder call signs, not official species — the live picker at favoritepicker.com scans the real, full Pokédex.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="wrap lead-col">
+    <p>Here's the honest problem: the Pokémon roster stopped being "small enough to hold in your head" somewhere around Generation 4, and it has only gotten bigger since. Every fan eventually hits the same wall — asked to name a favorite, they either freeze, list five, or default to whatever's trending that month. A picker tool isn't there to replace your taste. It's there to break the freeze, hand you a starting point, and get you talking about Pokémon again instead of stalling on the question.</p>
+    <p>This particular version of the tool is built like a scanner rather than a scrolling list, on purpose. Scanning implies a search happening in the background — you set a target, the system searches, and it hands you the closest match instantly. That framing matches how people actually want to use it: not as a browsing session, but as a quick, almost mechanical way to get from "I don't know" to "here's an answer" without the in-between scrolling.</p>
+  </div>
+</section>
+
+<section class="band" id="engine">
+  <div class="wrap">
+    <h2>Why a Favorite Pokemon Picker Beats Scrolling the Pokédex Yourself<span class="bar"></span></h2>
+    <div class="lead-col">
+      <p>Manually scrolling through a full Pokédex to "just pick one" sounds simple until you actually try it. You start at Bulbasaur, get nostalgic, jump to Generation 6 out of curiosity, forget where you started, and twenty minutes later you've made zero progress and opened twelve browser tabs. That's not a personal failing — it's what happens when a list gets too long for linear browsing to work well.</p>
+      <p>A dedicated picker sidesteps the whole problem by treating the decision as a search problem instead of a scrolling problem. Rather than reading every entry in order, you describe what you're roughly interested in — a type, a region, whether legendaries are fair game — and the tool searches that smaller space for you, instantly. The Favorite Pokemon Picker exists specifically to make that search step effortless, so the only thing left for you to do is react to the result.</p>
+      <p>There's a practical speed argument too. Trying to browse a full species list on a phone, mid-conversation, is slow and awkward — tiny thumbnails, endless scrolling, tabs closing by accident. A one-button scan returns an answer in the time it takes to read this sentence, which matters when the question came up in a group chat and everyone's waiting on you.</p>
+      <p>It also removes a subtler cost: the guilt of "picking wrong." When you manually browse and choose, there's a nagging sense that somewhere further down the list was a better answer you didn't reach. A random scan sidesteps that entirely, because nobody blames a dice roll for missing an option — the result is simply what came up, and that framing makes it easier to enjoy the pick instead of second-guessing it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>Inside the Engine: How the Favorite Pokemon Picker Generates a Result<span class="bar"></span></h2>
+    <div class="lead-col">
+      <p>Nothing about the mechanism is complicated, and that's intentional — the value is in speed and fairness, not in clever engineering. Here's what actually happens behind the "scan" button:</p>
+    </div>
+    <div class="method">
+      <div class="row">
+        <div class="idx mono">01</div>
+        <div>
+          <h3>Filters build a pool</h3>
+          <p>Whatever you toggle — type, region, evolution stage, legendary status — trims the full species list down to a smaller candidate pool. Skip this step and the pool defaults to everything.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx mono">02</div>
+        <div>
+          <h3>One entry is drawn</h3>
+          <p>A single Pokémon is selected at random from that pool, with every remaining entry carrying equal odds — no weighting toward "popular" picks, no hidden favorites baked into the code.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx mono">03</div>
+        <div>
+          <h3>Result displays instantly</h3>
+          <p>The pick appears immediately along with its type, so you're not left guessing what you just got or clicking through to find out.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx mono">04</div>
+        <div>
+          <h3>Reroll on demand</h3>
+          <p>Didn't land right? Scan again. There's no cooldown timer and no cap on attempts, because the whole point is removing friction, not adding a new one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="who-uses-it">
+  <div class="wrap">
+    <h2>Scans vs. Tier Lists: Two Different Jobs</h2>
+    <div class="lead-col">
+      <p>It's worth separating what a picker does from what a community tier list does, because people sometimes expect the same tool to do both. A tier list is an opinion — ranked by competitive viability, popularity, or aesthetics, and shaped by whoever compiled it. It's useful when you want to know what other people think is strong or well-loved.</p>
+      <p>A scan is the opposite kind of tool. It has no opinion about which Pokémon is better designed, more competitively viable, or more nostalgic. Every entry left in the filtered pool has identical odds, so the result reflects nothing but chance constrained by whatever filters you chose. That's exactly why it works as a tiebreaker: nobody can argue the scan was biased toward a "meta" pick, because there's no meta logic running underneath it at all.</p>
+      <p>In practice, most fans end up using both tools for different jobs — a tier list when they want informed opinions, and a scanner when they want a genuinely random, judgment-free starting point. The Favorite Pokemon Picker firmly lives in the second category, and it's built to stay that way rather than creep toward becoming another ranked list in disguise.</p>
+    </div>
+  </div>
+</section>
+
+<section id="who-uses-it2">
+  <div class="wrap">
+    <h2>Who Actually Reaches for This Tool</h2>
+    <div class="lead-col">
+      <p>The audience for a random Pokémon picker is wider than "bored fan on a Tuesday." A few groups use it constantly:</p>
+    </div>
+    <ul class="usecase-list">
+      <li><strong>Local game shop hosts</strong> running casual pick-up nights use a filtered scan to randomly assign starter species for friendly, no-stakes matches.</li>
+      <li><strong>Discord community moderators</strong> run scans as a daily prompt — "today's random pick, draw it or roast it" — to keep quiet servers active without extra planning.</li>
+      <li><strong>Cosplay and art communities</strong> use it to generate prompt lists, picking a random species as the subject for a weekend sketch or costume sketch.</li>
+      <li><strong>Quiz night and trivia hosts</strong> use scans to generate surprise "name three facts about this Pokémon" rounds on the fly.</li>
+      <li><strong>Short-form video creators</strong> use a fresh scan as an unscripted hook — reacting to a random pick tends to feel more genuine than a pre-planned list.</li>
+      <li><strong>Nuzlocke and challenge-run players</strong> use filtered scans to randomly assign a starter, a mandatory teammate, or a banned species before a run begins.</li>
+    </ul>
+    <p class="lead-col muted" style="margin-top:20px;">What ties every one of these use cases together is timing. Nobody opens a picker tool as a weekend research project — it gets used in the middle of something else, when a fast, fair answer is worth more than a perfectly curated one. That's the entire design brief behind this terminal: get out of the way, return an answer, and let the conversation keep moving.</p>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <h2>A Four-Step Method Serious Fans Use</h2>
+    <div class="lead-col">
+      <p>A random scan is a great entry point, but if your goal is a favorite that actually sticks rather than just today's lucky draw, a bit of structure turns "random" into "curated random." Here's the loop longtime players tend to fall into once they've used the tool a few times:</p>
+    </div>
+    <div class="method">
+      <div class="row">
+        <div class="idx mono">A</div>
+        <div>
+          <h3>Scan wide first</h3>
+          <p>Run an unfiltered scan two or three times before touching any toggles. Note which results you actually paused on — that instinct is more honest than a prepared answer.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx mono">B</div>
+        <div>
+          <h3>Filter toward the pattern</h3>
+          <p>If two of your three unfiltered results shared a type or region, apply that filter and scan again. You're not forcing an answer, you're following a signal you already gave yourself.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx mono">C</div>
+        <div>
+          <h3>Hold three finalists</h3>
+          <p>Stop rerolling once you have three results you'd genuinely be happy with, and compare them side by side instead of chasing a fourth "perfect" scan.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx mono">D</div>
+        <div>
+          <h3>Let the pick expire</h3>
+          <p>Treat today's favorite as valid for now, not forever. Rerunning the whole process after a new generation drops isn't indecision — it's how favorites are supposed to evolve.</p>
+        </div>
+      </div>
+    </div>
+    <div class="lead-col" style="margin-top:22px;">
+      <p>None of this turns picking a favorite into homework. The method above takes maybe five minutes total, and skipping straight to a single scan is always a valid choice too — the structure is there for people who want it, not a requirement for using the tool honestly, and plenty of trainers happily skip straight to step one and stop right there.</p>
+    </div>
+  </div>
+</section>
+
+<section id="controls">
+  <div class="wrap">
+    <h2>Every Control, Explained</h2>
+    <div class="lead-col">
+      <p>None of the controls are hidden behind menus or paywalls. Every toggle listed below is visible the moment you open the tool, because a picker that makes you hunt for basic settings defeats its own purpose.</p>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <p class="tagline mono">FILTER</p>
+        <h3>Type Lock</h3>
+        <p>Restrict the pool to one or several types at once, so a scan only ever returns something you're actually curious about.</p>
+      </div>
+      <div class="card">
+        <p class="tagline mono">FILTER</p>
+        <h3>Region / Generation</h3>
+        <p>Stay inside the games you grew up with, or open the pool to every region released so far.</p>
+      </div>
+      <div class="card">
+        <p class="tagline mono">TOGGLE</p>
+        <h3>Legendary Switch</h3>
+        <p>Turn legendary and mythical species off entirely if you'd rather the scan stay focused on standard Pokémon.</p>
+      </div>
+      <div class="card">
+        <p class="tagline mono">ACTION</p>
+        <h3>Instant Rescan</h3>
+        <p>No cooldown, no daily cap — press it again the moment a result doesn't land.</p>
+      </div>
+      <div class="card">
+        <p class="tagline mono">OUTPUT</p>
+        <h3>Shareable Result Line</h3>
+        <p>Copy the result as plain text to drop straight into a group chat, stream chat, or caption.</p>
+      </div>
+      <div class="card">
+        <p class="tagline mono">ACCESS</p>
+        <h3>No Login</h3>
+        <p>Nothing to install and nothing to sign into — open the page and the tool is ready.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="wrap lead-col">
+    <h2>Answers Before You Ask<span class="bar"></span></h2>
+
+    <details class="faq">
+      <summary>Does the picker include Mega Evolutions and regional forms?</summary>
+      <p>Yes — alternate forms and regional variants sit in the pool and can be switched on or off from the filter panel.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Can I exclude legendary and mythical Pokemon from results?</summary>
+      <p>Yes, there's a dedicated toggle for that so results stay limited to standard species when that's what you want.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Is there a daily limit on how many times I can scan?</summary>
+      <p>No. Scan as many times as you like — there's no cooldown, cap, or account requirement standing between you and another attempt.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Will the tool repeat the same Pokemon twice in a row?</summary>
+      <p>It can — each scan is an independent random draw, the same way rolling a die twice can land on the same number twice. Scan again if you want a guaranteed change.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Can I use this for tournament or challenge-run seeding?</summary>
+      <p>Yes. Plenty of players use filtered scans to randomly seed challenge runs, draft leagues, or party lineups for streams and casual tournaments.</p>
+    </details>
+
+    <details class="faq">
+      <summary>Is any of my personal data stored when I use the picker?</summary>
+      <p>No account or personal information is required, and results aren't tied to any personal identifier.</p>
+    </details>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap lead-col">
+    <h2>Who Keeps the Data Fresh</h2>
+    <div class="about-box">
+      <div class="avatar" aria-hidden="true">📟</div>
+      <div>
+        <p><strong>This page is maintained by a small crew of fans who kept losing arguments about their own favorites</strong> and got tired of scrolling to settle them. We cross-check the species pool against official releases after every new generation drops, read through the feedback people leave on the live tool, and ship small fixes rather than letting reported bugs sit.</p>
+        <p>Notice outdated data or want a control we haven't built yet? The feedback link on <a href="https://favoritepicker.com/" target="_blank" rel="noopener">favoritepicker.com</a> reaches the people who actually maintain this, not a ticket queue.</p>
+        <p>We're also upfront that this page and the linked tool are an independent fan project, not an official Pokémon Company product. We don't claim authority over "correct" favorites, and we don't run ads that try to steer your pick toward a sponsor. The scan is exactly as neutral as it looks, and we'd rather keep it boring and reliable than dress it up with gimmicks that get in the way of the one button people actually came for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="final-cta">
+  <div class="wrap lead-col" style="text-align:center;">
+    <h2 style="justify-content:center;">Stop Scrolling. Run the Scan.</h2>
+    <p class="muted">Free, instant, no account. One button between you and an answer.</p>
+    <a class="btn" href="https://favoritepicker.com/" target="_blank" rel="noopener">Open the Favorite Pokemon Picker →</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Trainer Terminal · An independent fan project pointing to the Favorite Pokemon Picker.</p>
+  <p><a href="https://favoritepicker.com/" target="_blank" rel="noopener">favoritepicker.com</a></p>
+  <p class="updated mono">Content last reviewed: July 2026</p>
+</footer>
+
+<script>
+(function(){
+  var results = [
+    ["UNIT-07 \"Kindleback\"","Fire / Rock"],
+    ["UNIT-14 \"Ripplefang\"","Water"],
+    ["UNIT-22 \"Verdant Coil\"","Grass / Poison"],
+    ["UNIT-31 \"Voltmoth\"","Electric / Bug"],
+    ["UNIT-45 \"Hollowchime\"","Ghost"],
+    ["UNIT-58 \"Granite Pup\"","Ground / Fighting"],
+    ["UNIT-63 \"Frostquill\"","Ice / Flying"],
+    ["UNIT-79 \"Duskrail\"","Dark / Steel"],
+    ["UNIT-88 \"Sunwick\"","Fairy"],
+    ["UNIT-93 \"Marrowtide\"","Water / Dragon"]
+  ];
+  var btn = document.getElementById('scanBtn');
+  var out = document.getElementById('termOutput');
+  var typing = false;
+
+  function typeLine(text, cb){
+    var i = 0;
+    out.textContent = '';
+    var iv = setInterval(function(){
+      out.textContent += text[i];
+      i++;
+      if(i >= text.length){
+        clearInterval(iv);
+        if(cb) cb();
+      }
+    }, 18);
+  }
+
+  btn.addEventListener('click', function(){
+    if(typing) return;
+    typing = true;
+    var pick = results[Math.floor(Math.random()*results.length)];
+    var line = "> scanning pool...\n> match found: " + pick[0] + "\n> type: " + pick[1];
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced){
+      out.textContent = line;
+      typing = false;
+    } else {
+      typeLine(line, function(){ typing = false; });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
